@@ -1,29 +1,36 @@
 // lib/widgets/custom_footer.dart
-
 import 'package:flutter/material.dart';
 
 class CustomFooter extends StatelessWidget {
-  final VoidCallback onButtonPressed; // Fonction de rappel pour le bouton
+  final VoidCallback onButtonPressed;
+  final double buttonWidth;
+  final double buttonHeight;
 
-  CustomFooter({required this.onButtonPressed});
+  CustomFooter({
+    required this.onButtonPressed,
+    this.buttonWidth = 60.0,
+    this.buttonHeight = 60.0,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFFF1F7F7), // Couleur de fond du footer
-      padding: EdgeInsets.symmetric(horizontal: 64.0, vertical: 8.0),
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center, // Centrer le contenu dans le Row
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Expanded(
+            child: Container(),
+          ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50.0), // Border radius à 50%
-              color: Colors.blue, // Background blue
-            ),
-            child: IconButton(
-              icon: Icon(Icons.add), // Icône "Add"
-              color: Color(0xFF000408), // Couleur de l'icône
-              onPressed: onButtonPressed, // Utilisation de la fonction de rappel
+            width: buttonWidth,
+            height: buttonHeight,
+            child: FloatingActionButton(
+              key: UniqueKey(),
+              onPressed: onButtonPressed,
+              backgroundColor: const Color(0xFF3D1B02),
+              child: const Icon(Icons.add, color: Colors.white),
             ),
           ),
         ],
