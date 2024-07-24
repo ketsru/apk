@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:apk/widgets/custom_info_container.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
+import 'package:apk/widgets/custom_footer.dart'; // Importez le CustomFooter
 
 class StudentAttendance extends StatelessWidget {
   final List<Map<String, dynamic>> classData;
 
+  // Assurez-vous que le constructeur prend les données en paramètre
   const StudentAttendance({Key? key, required this.classData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Présence.',),
+      appBar: CustomAppBar(title: 'Présence'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 'Liste des classes',
                 style: TextStyle(
@@ -27,8 +29,8 @@ class StudentAttendance extends StatelessWidget {
             ),
             ...classData.map((data) {
               return CustomInfoContainer(
-                title: data['level'],
-                subtitle: '${data['studentCount']} élèves',
+                title: data['level'] as String, // Assurez-vous que c'est un String
+                subtitle: '${data['studentCount'] as int} élèves', // Assurez-vous que c'est un int
                 icon: Icons.school,
                 iconColor: Colors.green,
                 onTap: () {
@@ -36,6 +38,14 @@ class StudentAttendance extends StatelessWidget {
                 },
               );
             }).toList(),
+            CustomFooter(
+              onButtonPressed: () {
+                // Action à effectuer lorsque le bouton est pressé
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Bouton ajouté pressé')),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -53,7 +63,7 @@ class StudentAttendance extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Classe: ${classData['level']}',
+                'Classe: ${classData['level'] as String}', // Assurez-vous que c'est un String
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -62,14 +72,14 @@ class StudentAttendance extends StatelessWidget {
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
-                  itemCount: classData['students'].length,
+                  itemCount: (classData['students'] as List).length, // Assurez-vous que c'est une List
                   itemBuilder: (context, index) {
-                    final student = classData['students'][index];
+                    final student = (classData['students'] as List)[index] as Map<String, dynamic>;
                     return ListTile(
-                      title: Text(student['name']),
-                      subtitle: Text('ID: ${student['studentId']}'),
+                      title: Text(student['name'] as String),
+                      subtitle: Text('ID: ${student['studentId'] as String}'),
                       leading: CircleAvatar(
-                        child: Text(student['name'][0]),
+                        child: Text((student['name'] as String)[0]),
                       ),
                     );
                   },

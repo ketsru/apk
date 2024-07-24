@@ -11,8 +11,9 @@ import 'screens/parent/parent_page.dart';
 import 'repositories/user_repository.dart';
 import 'package:apk/screens/teacher/course_page.dart';
 import 'package:apk/screens/teacher/teacher_exercice_page.dart';
-import 'package:apk/screens/teacher/overview_student_attendance.dart';
+import 'package:apk/screens/teacher/attendance_screen.dart';
 import 'package:apk/screens/teacher/note_page.dart';
+import 'package:apk/screens/teacher/data.dart'; 
 
 void main() {
   final ApiService apiService = ApiService(baseUrl: 'https://schoolapp-pink-xi.vercel.app/api/api');
@@ -46,13 +47,19 @@ class MyApp extends StatelessWidget {
           '/exercice': (context) => TeacherExercicePage(), 
           '/note': (context) => AddStudentNote(),
           '/attendance': (context) => StudentAttendance(
-              classData: [
-                {'level': 'Terminal G3', 'studentCount': 30},
-                {'level': 'Terminal A4', 'studentCount': 25},
-                {'level': 'Terminal G2', 'studentCount': 28},
-                {'level': 'Terminal D', 'studentCount': 32},
-              ],
-            ),
+          classData: classes.map((classModel) {
+            return {
+              'level': classModel.name,
+              'studentCount': classModel.students.length,
+              'students': classModel.students.map((student) {
+                return {
+                  'name': student.name,
+                  'studentId': student.studentId,
+                };
+              }).toList(),
+            };
+          }).toList(),
+        ),
           // Ajoute d'autres routes ici si nécessaire
         },
       ),
