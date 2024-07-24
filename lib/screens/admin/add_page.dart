@@ -6,7 +6,7 @@ class AddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(title: 'Admin',),
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

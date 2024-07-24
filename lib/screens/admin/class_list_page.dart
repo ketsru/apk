@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:apk/widgets/custom_info_container.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
-import 'package:apk/screens/admin/student_list_page.dart'; // Assurez-vous d'importer le bon chemin
 
 class ClassListPage extends StatelessWidget {
   final List<Map<String, dynamic>> classData;
@@ -11,7 +10,7 @@ class ClassListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(title: 'Class list',),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,14 +32,7 @@ class ClassListPage extends StatelessWidget {
                 icon: Icons.school,
                 iconColor: Colors.green,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => StudentListPage(
-                        level: data['level'],
-                      ),
-                    ),
-                  );
+                  
                 },
               );
             }).toList(),

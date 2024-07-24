@@ -1,43 +1,25 @@
-// models/student.dart
+// student_model.dart
 
-class Student {
-  final String numeroMatricule;
+import 'package:flutter/material.dart';
+
+class StudentModel {
   final String name;
-  final int age;
-  final String level;
-  final DateTime birthday;
-  final DateTime dateArrivee;
+  final String className;
 
-  Student({
-    required this.numeroMatricule,
-    required this.name,
-    required this.age,
-    required this.level,
-    required this.birthday,
-    required this.dateArrivee,
-  });
+  StudentModel({required this.name, required this.className});
+}
 
-  // Convert a Student from a JSON object
-  factory Student.fromJson(Map<String, dynamic> json) {
-    return Student(
-      numeroMatricule: json['numero_matricule'],
-      name: json['name'],
-      age: json['age'],
-      level: json['level'],
-      birthday: DateTime.parse(json['birthday']),
-      dateArrivee: DateTime.parse(json['date_arrivee']),
-    );
+class StudentProvider with ChangeNotifier {
+  List<StudentModel> _students = [];
+
+  List<StudentModel> get students => _students;
+
+  void addStudent(String name, String className) {
+    _students.add(StudentModel(name: name, className: className));
+    notifyListeners();
   }
 
-  // Convert a Student to a JSON object
-  Map<String, dynamic> toJson() {
-    return {
-      'numero_matricule': numeroMatricule,
-      'name': name,
-      'age': age,
-      'level': level,
-      'birthday': birthday.toIso8601String(),
-      'date_arrivee': dateArrivee.toIso8601String(),
-    };
+  List<StudentModel> getStudentsByClass(String className) {
+    return _students.where((student) => student.className == className).toList();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ApiService {
   final String baseUrl;
@@ -6,12 +7,14 @@ class ApiService {
   ApiService({required this.baseUrl});
 
   Future<http.Response> post(String endpoint, Map<String, dynamic> data) async {
-    final url = '$baseUrl/$endpoint';
-    return await http.post(
-      Uri.parse(url),
-      body: data,
+    final url = Uri.parse('$baseUrl/$endpoint');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(data),
     );
+    return response;
   }
-
-  // Define other HTTP methods (get, put, delete) if needed
 }

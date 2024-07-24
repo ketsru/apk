@@ -37,7 +37,7 @@ class CustomButton extends StatelessWidget {
             return textColor;
           }),
           shape: MaterialStateProperty.all<OutlinedBorder>(
-            RoundedRectangleBorder(
+            const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero, // Pas de border-radius
               // Aucun effet de shadow
             ),
@@ -46,10 +46,10 @@ class CustomButton extends StatelessWidget {
         ),
         child: Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(vertical: 16.0), // Padding interne pour le texte
+          padding: const EdgeInsets.symmetric(vertical: 14.0), // Padding interne pour le texte
           child: Text(
             text,
-            style: TextStyle(fontSize: 16.0),
+            style: const TextStyle(fontSize: 20.0),
           ),
         ),
       ),

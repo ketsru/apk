@@ -1,122 +1,82 @@
+// bottom_sheet_example.dart
+
 import 'package:flutter/material.dart';
-import 'package:apk/screens/admin/student_list_page.dart'; // Importez la page StudentListPage
+import 'package:apk/models/class.dart'; // Assurez-vous que le modèle est importé
+import 'package:apk/models/eleve.dart'; // Importer le modèle d'élève
+import 'package:apk/widgets/types.dart'; // Importer le fichier des types
 
-class CustomClassButton extends StatelessWidget {
-  final String level;
-  final int studentCount;
+class BottomSheetExample extends StatefulWidget {
+  final List<ClassModel> classes;
+  final List<Student> students;
+  final OnCheckboxChanged onCheckboxChanged;
 
-  const CustomClassButton({
+  const BottomSheetExample({
+    required this.classes,
+    required this.students,
+    required this.onCheckboxChanged,
     Key? key,
-    required this.level,
-    required this.studentCount,
   }) : super(key: key);
 
   @override
+  _BottomSheetExampleState createState() => _BottomSheetExampleState();
+}
+
+class _BottomSheetExampleState extends State<BottomSheetExample> {
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StudentListPage(level: level),
-          ),
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.all(8.0), // Margin autour du container
-        padding: EdgeInsets.all(8.0), // Padding à l'intérieur du container
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(4.0),
-        ),
-        child: Row(
-          children: [
-            Image.asset(
-              'assets/images/icone_classe.png',
-              width: 32,
-              height: 64,
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    level,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Elèves = $studentCount',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(3.0),
+                topRight: Radius.circular(3.0),
               ),
             ),
-            Icon(
-              Icons.arrow_forward,
-              size: 32,
-              color: Colors.blue,
+            padding: const EdgeInsets.only(top: 12.0),
+            child: ListView.builder(
+              itemCount: widget.classes.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      widget.classes[index].name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    leading: Checkbox(
+                      value: widget.classes[index].isSelected,
+                      onChanged: (value) {
+                        widget.onCheckboxChanged(index, value!);
+                      },
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.orange,
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
-
-class ClassButtonsPage extends StatelessWidget {
-  final List<Map<String, dynamic>> classData = [
-    {'level': 'CP1', 'studentCount': 100},
-    {'level': 'CP2', 'studentCount': 120},
-    {'level': 'CE1', 'studentCount': 110},
-    {'level': 'CE2', 'studentCount': 115},
-    {'level': 'CM1', 'studentCount': 105},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Liste des Classes'),
-      ),
-      body: ListView.builder(
-        itemCount: classData.length,
-        itemBuilder: (context, index) {
-          final data = classData[index];
-          return CustomClassButton(
-            level: data['level'],
-            studentCount: data['studentCount'],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class StudentListPage extends StatelessWidget {
-  final String level;
-
-  const StudentListPage({Key? key, required this.level}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Logique pour filtrer les étudiants par niveau si nécessaire
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Liste des étudiants de $level'),
-      ),
-      body: Center(
-        child: Text('Liste des étudiants de $level'),
-      ),
-    );
-  }
-}
-
-// Utilisation :
-// Navigator.push(context, MaterialPageRoute(builder: (context) => ClassButtonsPage()));

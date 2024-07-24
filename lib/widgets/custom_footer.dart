@@ -1,7 +1,12 @@
+// lib/widgets/custom_footer.dart
+
 import 'package:flutter/material.dart';
-import 'package:apk/screens/admin/add_page.dart'; // Assure-toi que le chemin d'importation est correct
 
 class CustomFooter extends StatelessWidget {
+  final VoidCallback onButtonPressed; // Fonction de rappel pour le bouton
+
+  CustomFooter({required this.onButtonPressed});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,12 +23,7 @@ class CustomFooter extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.add), // Icône "Add"
               color: Color(0xFF000408), // Couleur de l'icône
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddPage()), // Utilisation de AddPage comme widget
-                );
-              },
+              onPressed: onButtonPressed, // Utilisation de la fonction de rappel
             ),
           ),
         ],
