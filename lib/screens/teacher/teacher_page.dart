@@ -33,7 +33,7 @@ class TeacherPage extends StatelessWidget {
   Future<String> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token');
-    print('Retrieved Token: $token'); // Debug print
+    print('Retrieved Token: $token');
     return token ?? '';
   }
 
@@ -42,6 +42,23 @@ class TeacherPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'School',
+        actions: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.orange[600],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: const Icon(
+                  Icons.notifications_active,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -55,61 +72,61 @@ class TeacherPage extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          _buildFeatureCard(
-                            context,
-                            icon: Icons.menu_book,
-                            color: Colors.blue[300]!,
-                            text: 'Cours',
-                            route: '/cours',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildFeatureCard(
-                            context,
-                            icon: Icons.assignment,
-                            color: Colors.grey.shade200,
-                            text: 'Exercice',
-                            route: '/exercice',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildFeatureCard(
-                            context,
-                            icon: Icons.grade,
-                            color: Colors.green[300]!,
-                            text: 'Note',
-                            route: '/note',
-                          ),
-                          const SizedBox(width: 16),
-                          _buildFeatureCard(
-                            context,
-                            icon: Icons.check_circle,
-                            color: Colors.orange[300]!,
-                            text: 'Présence',
-                            route: '/attendance',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Classes',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            _buildFeatureCard(
+                              context,
+                              icon: Icons.menu_book,
+                              color: Colors.blue[300]!,
+                              text: 'Cours',
+                              route: '/cours',
+                            ),
+                            const SizedBox(width: 16),
+                            _buildFeatureCard(
+                              context,
+                              icon: Icons.assignment,
+                              color: Colors.grey.shade200,
+                              text: 'Exercice',
+                              route: '/exercice',
+                            ),
+                            const SizedBox(width: 16),
+                            _buildFeatureCard(
+                              context,
+                              icon: Icons.grade,
+                              color: Colors.green[300]!,
+                              text: 'Note',
+                              route: '/note',
+                            ),
+                            const SizedBox(width: 16),
+                            _buildFeatureCard(
+                              context,
+                              icon: Icons.check_circle,
+                              color: Colors.orange[300]!,
+                              text: 'Présence',
+                              route: '/attendance',
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: FutureBuilder<String>(
+                      const SizedBox(height: 20),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Classes',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      FutureBuilder<String>(
                         future: _getToken(),
                         builder: (context, tokenSnapshot) {
                           if (tokenSnapshot.connectionState == ConnectionState.waiting) {
@@ -132,11 +149,13 @@ class TeacherPage extends StatelessWidget {
                                 } else {
                                   final classes = snapshot.data!;
                                   return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
                                     itemCount: classes.length,
                                     itemBuilder: (context, index) {
                                       final classModel = classes[index];
                                       return Card(
-                                        margin: const EdgeInsets.symmetric(vertical: 14.0),
+                                        margin: const EdgeInsets.symmetric(vertical: 8.0),
                                         elevation: 2.0,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10.0),
@@ -182,8 +201,8 @@ class TeacherPage extends StatelessWidget {
                           }
                         },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
