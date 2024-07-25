@@ -1,7 +1,7 @@
 // lib/widgets/custom_modal_with_margin.dart
 
 import 'package:flutter/material.dart';
-import 'package:apk/screens/teacher/add_course.dart'; // Assurez-vous que le chemin est correct
+import 'package:apk/screens/teacher/add_course.dart';
 
 class CustomModalWithMargin {
   static void showAddModal(BuildContext context) {

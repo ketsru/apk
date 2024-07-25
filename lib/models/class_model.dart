@@ -13,7 +13,7 @@ class ClassModel {
     return ClassModel(
       id: json['id'],
       name: json['name'],
-      studentsNumber: json['students_number'] ?? 0,
+      studentsNumber: json['students_number'],
     );
   }
 }
