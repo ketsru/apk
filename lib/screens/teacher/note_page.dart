@@ -1,10 +1,10 @@
 // add_student_note.dart
 import 'package:flutter/material.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
-import 'package:apk/widgets/class_modal.dart';
-import 'package:apk/models/class.dart'; // Importer le modèle de classe
-import 'package:apk/models/eleve.dart'; // Importer le modèle d'élève
-import 'data.dart'; // Importer le fichier de données
+//import 'package:apk/widgets/class_modal.dart';
+import 'package:apk/models/class.dart';
+import 'package:apk/models/eleve.dart';
+import 'data.dart';
 
 void main() => runApp(const AddStudentNote());
 
@@ -124,12 +124,12 @@ class _BottomSheetExampleState extends State<BottomSheetExample> {
                       ),
                     ),
                     onTap: () {
-                      showDialog(
+                      /*showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return ClassModal(classModel: classModel);
+                          //return ClassModal(classModel: classModel);
                         },
-                      );
+                      );*/
                     },
                   ),
                 );
