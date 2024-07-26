@@ -9,8 +9,10 @@ class TeacherExercicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Exercice.',), // Utiliser le CustomAppBar ici
-      body: Column(
+      appBar: CustomAppBar(
+        title: 'Exercice.',
+      ), // Utiliser le CustomAppBar ici
+      body: const Column(
         children: [
           Expanded(
             child: Center(
@@ -20,13 +22,17 @@ class TeacherExercicePage extends StatelessWidget {
               ),
             ),
           ),
-          CustomFooter(
-            onButtonPressed: () {
-              // Appeler le modal ici
-              CustomModalWithMargin.showAddModal(context);
-            },
-          ), // Ajouter le footer ici avec une action personnalisée
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        key: UniqueKey(), // Ensure unique key for AnimatedSwitcher
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) => const BottomSheetContent(),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

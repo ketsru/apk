@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'blocs/authentication_bloc.dart';
 import 'services/api_service.dart';
 import 'screens/welcome/welcome_page.dart';
@@ -13,14 +14,22 @@ import 'package:apk/screens/teacher/course_page.dart';
 import 'package:apk/screens/teacher/teacher_exercice_page.dart';
 import 'package:apk/screens/teacher/attendance_screen.dart';
 import 'package:apk/screens/teacher/note_page.dart';
-import 'package:apk/screens/teacher/data.dart'; 
+import 'package:apk/screens/teacher/data.dart';
 
-void main() {
-  final ApiService apiService = ApiService(baseUrl: 'https://schoolapp-pink-xi.vercel.app/api/api');
+void main() async {
+  // Initialiser Hive
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('class');
+
+  final ApiService apiService =
+      ApiService(baseUrl: 'https://schoolapp-pink-xi.vercel.app/api/api');
   final UserRepository userRepository = UserRepository(apiService: apiService);
-  final AuthenticationBloc authBloc = AuthenticationBloc(userRepository: userRepository);
+  final AuthenticationBloc authBloc =
+      AuthenticationBloc(userRepository: userRepository);
 
-  runApp(MyApp(authBloc: authBloc));}
+  runApp(MyApp(authBloc: authBloc));
+}
 
 class MyApp extends StatelessWidget {
   final AuthenticationBloc authBloc;
@@ -44,22 +53,22 @@ class MyApp extends StatelessWidget {
           '/parent': (context) => ParentPage(),
           '/profile': (context) => ProfilePage(),
           '/cours': (context) => TeacherCoursePage(),
-          '/exercice': (context) => TeacherExercicePage(), 
+          '/exercice': (context) => TeacherExercicePage(),
           '/note': (context) => AddStudentNote(),
           '/attendance': (context) => StudentAttendance(
-          classData: classes.map((classModel) {
-            return {
-              'level': classModel.name,
-              'studentCount': classModel.students.length,
-              'students': classModel.students.map((student) {
-                return {
-                  'name': student.name,
-                  'studentId': student.studentId,
-                };
-              }).toList(),
-            };
-          }).toList(),
-        ),
+                classData: classes.map((classModel) {
+                  return {
+                    'level': classModel.name,
+                    'studentCount': classModel.students.length,
+                    'students': classModel.students.map((student) {
+                      return {
+                        'name': student.name,
+                        'studentId': student.studentId,
+                      };
+                    }).toList(),
+                  };
+                }).toList(),
+              ),
           // Ajoute d'autres routes ici si nécessaire
         },
       ),

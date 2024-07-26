@@ -56,7 +56,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4), // Border-radius
+            borderRadius: BorderRadius.circular(21),
+            borderSide: BorderSide.none,
           ),
         ),
         obscureText: _isObscured,

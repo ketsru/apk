@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
-import 'package:apk/widgets/class_modal.dart';
 import 'package:apk/models/class_model.dart';
 
 // Function to fetch classes
@@ -64,21 +63,44 @@ class TeacherPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 padding: const EdgeInsets.all(16),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.search,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'Recherche',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
+                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             _buildFeatureCard(
                               context,
@@ -103,14 +125,14 @@ class TeacherPage extends StatelessWidget {
                               text: 'Note',
                               route: '/note',
                             ),
-                            const SizedBox(width: 16),
-                            _buildFeatureCard(
-                              context,
-                              icon: Icons.check_circle,
-                              color: Colors.orange[300]!,
-                              text: 'Présence',
-                              route: '/attendance',
-                            ),
+                            //   const SizedBox(width: 16),
+                            //      _buildFeatureCard(
+                            //   context,
+                            //  icon: Icons.check_circle,
+                            //  color: Colors.orange[300]!,
+                            //  text: 'Présence',
+                            //  route: '/attendance',
+                            // ),
                           ],
                         ),
                       ),
@@ -120,7 +142,7 @@ class TeacherPage extends StatelessWidget {
                         child: Text(
                           'Classes',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 19,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -129,71 +151,46 @@ class TeacherPage extends StatelessWidget {
                       FutureBuilder<String>(
                         future: _getToken(),
                         builder: (context, tokenSnapshot) {
-                          if (tokenSnapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
+                          if (tokenSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else if (tokenSnapshot.hasError) {
-                            return Center(child: Text('Error: ${tokenSnapshot.error}'));
-                          } else if (!tokenSnapshot.hasData || tokenSnapshot.data!.isEmpty) {
-                            return const Center(child: Text('Token not available.'));
+                            return Center(
+                                child: Text('Error: ${tokenSnapshot.error}'));
+                          } else if (!tokenSnapshot.hasData ||
+                              tokenSnapshot.data!.isEmpty) {
+                            return const Center(
+                                child: Text('Token not available.'));
                           } else {
                             final accessToken = tokenSnapshot.data!;
                             return FutureBuilder<List<ClassModel>>(
                               future: fetchClasses(accessToken),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return const Center(child: CircularProgressIndicator());
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
-                                  return Center(child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                  return const Center(child: Text('No classes available.'));
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return const Center(
+                                      child: Text('No classes available.'));
                                 } else {
                                   final classes = snapshot.data!;
-                                  return ListView.builder(
+                                  return ListView(
                                     shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: classes.length,
-                                    itemBuilder: (context, index) {
-                                      final classModel = classes[index];
-                                      return Card(
-                                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                                        elevation: 2.0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                        ),
-                                        child: ListTile(
-                                          leading: Container(
-                                            width: 50,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color: Colors.orange,
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.class_,
-                                                color: Colors.white,
-                                                size: 24,
-                                              ),
-                                            ),
-                                          ),
-                                          contentPadding: const EdgeInsets.all(12.0),
-                                          title: Text(
-                                            classModel.name,
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          ),
-                                          subtitle: Text('Nombre d\'élève: ${classModel.studentsNumber}'),
-                                          trailing: const Icon(Icons.arrow_forward_ios),
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return ClassModal(classModel: classModel);
-                                              },
-                                            );
-                                          },
-                                        ),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    children: classes.map((classModel) {
+                                      return TeacherClass(
+                                        className: classModel.name,
+                                        numberOfPeople:
+                                            'Nombre d\'élève: ${classModel.studentsNumber}',
                                       );
-                                    },
+                                    }).toList(),
                                   );
                                 }
                               },
@@ -212,7 +209,11 @@ class TeacherPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureCard(BuildContext context, {required IconData icon, required Color color, required String text, required String route}) {
+  Widget _buildFeatureCard(BuildContext context,
+      {required IconData icon,
+      required Color color,
+      required String text,
+      required String route}) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, route);
@@ -220,15 +221,14 @@ class TeacherPage extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 100,
-            width: 100,
+            height: 80,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(11),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: Colors.white,
+                  color: Colors.grey.shade400,
                   blurRadius: 20,
                   spreadRadius: 2,
                 ),
@@ -251,6 +251,73 @@ class TeacherPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TeacherClass extends StatelessWidget {
+  final String className;
+  final String numberOfPeople;
+
+  const TeacherClass({
+    Key? key,
+    required this.className,
+    required this.numberOfPeople,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    color: Colors.orange,
+                    child: const Icon(
+                      Icons.school,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      className,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      numberOfPeople,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const Icon(Icons.chevron_right),
+          ],
+        ),
       ),
     );
   }

@@ -3,16 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
 import 'package:apk/widgets/custom_footer.dart';
-import 'package:apk/widgets/custom_modal_with_margin.dart';
+import 'package:apk/widgets/custom_modal_with_margin.dart'; // Non utilisé ici, mais peut-être utile ailleurs.
 
 class TeacherCoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Cours',),
-      body: Column(
+      appBar: CustomAppBar(
+        title: 'Cours',
+      ),
+      body: const Column(
         children: [
-          const Expanded(
+          Expanded(
             child: Center(
               child: Text(
                 'Bienvenue sur la page des cours !',
@@ -20,12 +22,17 @@ class TeacherCoursePage extends StatelessWidget {
               ),
             ),
           ),
-          CustomFooter(
-            onButtonPressed: () {
-              CustomModalWithMargin.showAddModal(context);
-            },
-          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        key: UniqueKey(), // Ensure unique key for AnimatedSwitcher
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) => const BottomSheetContent(),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

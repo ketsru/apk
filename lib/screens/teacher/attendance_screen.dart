@@ -7,7 +7,8 @@ class StudentAttendance extends StatelessWidget {
   final List<Map<String, dynamic>> classData;
 
   // Assurez-vous que le constructeur prend les données en paramètre
-  const StudentAttendance({Key? key, required this.classData}) : super(key: key);
+  const StudentAttendance({Key? key, required this.classData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,10 @@ class StudentAttendance extends StatelessWidget {
             ),
             ...classData.map((data) {
               return CustomInfoContainer(
-                title: data['level'] as String, // Assurez-vous que c'est un String
-                subtitle: '${data['studentCount'] as int} élèves', // Assurez-vous que c'est un int
+                title:
+                    data['level'] as String, // Assurez-vous que c'est un String
+                subtitle:
+                    '${data['studentCount'] as int} élèves', // Assurez-vous que c'est un int
                 icon: Icons.school,
                 iconColor: Colors.green,
                 onTap: () {
@@ -38,21 +41,15 @@ class StudentAttendance extends StatelessWidget {
                 },
               );
             }).toList(),
-            CustomFooter(
-              onButtonPressed: () {
-                // Action à effectuer lorsque le bouton est pressé
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Bouton ajouté pressé')),
-                );
-              },
-            ),
+            BottomSheetContent(),
           ],
         ),
       ),
     );
   }
 
-  void _showClassDetailsModal(BuildContext context, Map<String, dynamic> classData) {
+  void _showClassDetailsModal(
+      BuildContext context, Map<String, dynamic> classData) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -72,9 +69,11 @@ class StudentAttendance extends StatelessWidget {
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
-                  itemCount: (classData['students'] as List).length, // Assurez-vous que c'est une List
+                  itemCount: (classData['students'] as List)
+                      .length, // Assurez-vous que c'est une List
                   itemBuilder: (context, index) {
-                    final student = (classData['students'] as List)[index] as Map<String, dynamic>;
+                    final student = (classData['students'] as List)[index]
+                        as Map<String, dynamic>;
                     return ListTile(
                       title: Text(student['name'] as String),
                       subtitle: Text('ID: ${student['studentId'] as String}'),
