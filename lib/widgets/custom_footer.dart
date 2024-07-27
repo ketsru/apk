@@ -1,5 +1,5 @@
-// lib/widgets/custom_footer.dart
 import 'package:flutter/material.dart';
+import 'package:apk/widgets/select_drop_down.dart'; // Assurez-vous que le chemin d'importation est correct
 
 class BottomSheetContent extends StatefulWidget {
   const BottomSheetContent({Key? key}) : super(key: key);
@@ -10,8 +10,13 @@ class BottomSheetContent extends StatefulWidget {
 
 class _BottomSheetContentState extends State<BottomSheetContent> {
   String selectedValue = '';
+  String selectClass = 'Sélectionnez la classe';
+  IconData selectClassIcone = Icons.gite_rounded;
+  String selectMatter = 'Sélectionnez la matière';
+  IconData selectMatterIcone = Icons.book_rounded;
 
-  List<String> classes = ['Terminal G3', 'Terminal G3', 'Terminal G3'];
+  List<String> classes1 = ['Terminal G3', 'Terminal G2', 'Terminal G1'];
+  List<String> classes2 = ['COURS G3', 'COURS G2', 'COURS G1'];
 
   void switchContent(String value) {
     setState(() {
@@ -27,85 +32,128 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          if (selectedValue.isEmpty)
-            const Padding(
-              padding: EdgeInsets.only(top: 16.0, left: 11.0),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Veuillez sélectionner la classe',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          if (selectedValue.isEmpty)
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: classes.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text('${classes[index]}'),
-                  onTap: () {
-                    switchContent(classes[index]);
-                  },
-                );
-              },
-            ),
-          if (selectedValue.isNotEmpty)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 14.0, top: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Veuillez sélectionner une matière :',
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            if (selectedValue.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Sélectionnez une classe',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10),
-                      ListTile(
-                        title: Text('ECM'),
-                      ),
-                      ListTile(
-                        title: Text('ECM'),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 26.0, bottom: 16.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      clearSelection();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      padding: EdgeInsets.all(10),
                     ),
-                    child: const Icon(
-                      Icons.chevron_left_sharp,
-                      color: Colors.white,
+                    const SizedBox(height: 5.0),
+                    CustomSingleSelectDropDown(
+                      selectedItem: (selectedItem) {
+                        //switchContent(selectedItem);
+                      },
+                      classes: classes1,
+                      icone: selectClassIcone,
+                      titre: selectClass,
+                    ),
+                    const SizedBox(height: 16.0),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Sélectionnez une matière',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    CustomSingleSelectDropDown(
+                      selectedItem: (selectedItem) {
+                        //switchContent(selectedItem);
+                      },
+                      classes: classes2,
+                      icone: selectMatterIcone,
+                      titre: selectMatter,
+                    ),
+                    const SizedBox(height: 14.0),
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          switchContent('selectedItem');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                        ),
+                        child: const Text(
+                          'Continuer',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18.0),
+                  ],
+                ),
+              ),
+            if (selectedValue.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 14.0, top: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Choix du dormat  une PDF WORD EXELL :',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-        ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 26.0, bottom: 16.0),
+                    child: Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          clearSelection();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                        ),
+                        child: const Icon(
+                          Icons.chevron_left_sharp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
