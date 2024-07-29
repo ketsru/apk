@@ -55,7 +55,8 @@ class _AddExerciseState extends State<AddExercise> {
                   _selectedClass = newValue;
                 });
               },
-              validator: (value) => value == null ? 'Veuillez choisir une classe' : null,
+              validator: (value) =>
+                  value == null ? 'Veuillez choisir une classe' : null,
               decoration: InputDecoration(
                 labelText: 'Choisir la classe',
                 border: OutlineInputBorder(),
@@ -77,7 +78,8 @@ class _AddExerciseState extends State<AddExercise> {
                   _selectedSubject = newValue;
                 });
               },
-              validator: (value) => value == null ? 'Veuillez choisir une matière' : null,
+              validator: (value) =>
+                  value == null ? 'Veuillez choisir une matière' : null,
               decoration: InputDecoration(
                 labelText: 'Choisir la matière',
                 border: OutlineInputBorder(),
