@@ -100,7 +100,6 @@ class TeacherPage extends StatelessWidget {
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             _buildFeatureCard(
                               context,
@@ -125,14 +124,6 @@ class TeacherPage extends StatelessWidget {
                               text: 'Note',
                               route: '/note',
                             ),
-                            //   const SizedBox(width: 16),
-                            //      _buildFeatureCard(
-                            //   context,
-                            //  icon: Icons.check_circle,
-                            //  color: Colors.orange[300]!,
-                            //  text: 'Présence',
-                            //  route: '/attendance',
-                            // ),
                           ],
                         ),
                       ),
