@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:apk/models/class_model.dart';
 import 'blocs/authentication_bloc.dart';
 import 'services/api_service.dart';
 import 'screens/welcome/welcome_page.dart';
@@ -17,10 +18,16 @@ import 'package:apk/screens/teacher/note_page.dart';
 import 'package:apk/screens/teacher/data.dart';
 
 void main() async {
-  // Initialiser Hive
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialiser Hive
   await Hive.initFlutter();
-  await Hive.openBox('class');
+  
+  // Enregistrer l'adaptateur pour ClassModel
+  Hive.registerAdapter(ClassModelAdapter());
+
+  // Ouvrir la boîte Hive
+  await Hive.openBox<ClassModel>('class');
 
   final ApiService apiService =
       ApiService(baseUrl: 'https://schoolapp-pink-xi.vercel.app/api/api');

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
 import 'package:apk/widgets/custom_footer.dart';
-import 'package:apk/widgets/custom_modal_with_margin.dart'; // Non utilisé ici, mais peut-être utile ailleurs.
-import 'package:apk/widgets/filtre_tab_bar.dart'; // Import the new widget
+//import 'package:apk/widgets/custom_modal_with_margin.dart';
+import 'package:apk/widgets/filtre_tab_bar.dart';
 
 class AddStudentNote extends StatefulWidget {
   @override

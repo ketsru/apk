@@ -1,3 +1,4 @@
+// Le Modal pour afficher la liste des élèves dans une classe
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

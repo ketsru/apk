@@ -1,3 +1,4 @@
+//Navbar présentant "Tout", "Class" et "Filtre"
 import 'package:flutter/material.dart';
 
 class TabBarWithFilter extends StatelessWidget {

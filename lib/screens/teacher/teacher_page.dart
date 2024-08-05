@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
 import 'package:apk/models/class_model.dart';
+import 'package:apk/widgets/class_modal.dart';
 
 // Function to fetch classes
 Future<List<ClassModel>> fetchClasses(String token) async {
@@ -27,6 +28,8 @@ Future<List<ClassModel>> fetchClasses(String token) async {
     throw Exception('Server error');
   }
 }
+
+// Autres imports et code existants...
 
 class TeacherPage extends StatelessWidget {
   Future<String> _getToken() async {
@@ -142,44 +145,31 @@ class TeacherPage extends StatelessWidget {
                       FutureBuilder<String>(
                         future: _getToken(),
                         builder: (context, tokenSnapshot) {
-                          if (tokenSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                          if (tokenSnapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
                           } else if (tokenSnapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${tokenSnapshot.error}'));
-                          } else if (!tokenSnapshot.hasData ||
-                              tokenSnapshot.data!.isEmpty) {
-                            return const Center(
-                                child: Text('Token not available.'));
+                            return Center(child: Text('Error: ${tokenSnapshot.error}'));
+                          } else if (!tokenSnapshot.hasData || tokenSnapshot.data!.isEmpty) {
+                            return const Center(child: Text('Token not available.'));
                           } else {
                             final accessToken = tokenSnapshot.data!;
                             return FutureBuilder<List<ClassModel>>(
                               future: fetchClasses(accessToken),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return const Center(child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
-                                  return Center(
-                                      child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
-                                  return const Center(
-                                      child: Text('No classes available.'));
+                                  return Center(child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                  return const Center(child: Text('No classes available.'));
                                 } else {
                                   final classes = snapshot.data!;
                                   return ListView(
                                     shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     children: classes.map((classModel) {
                                       return TeacherClass(
-                                        className: classModel.name,
-                                        numberOfPeople:
-                                            'Nombre d\'élève: ${classModel.studentsNumber}',
+                                        classModel: classModel,
                                       );
                                     }).toList(),
                                   );
@@ -200,11 +190,7 @@ class TeacherPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureCard(BuildContext context,
-      {required IconData icon,
-      required Color color,
-      required String text,
-      required String route}) {
+  Widget _buildFeatureCard(BuildContext context, {required IconData icon, required Color color, required String text, required String route}) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, route);
@@ -248,68 +234,72 @@ class TeacherPage extends StatelessWidget {
 }
 
 class TeacherClass extends StatelessWidget {
-  final String className;
-  final String numberOfPeople;
+  final ClassModel classModel;
 
-  const TeacherClass({
-    Key? key,
-    required this.className,
-    required this.numberOfPeople,
-  }) : super(key: key);
+  const TeacherClass({Key? key, required this.classModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    color: Colors.orange,
-                    child: const Icon(
-                      Icons.school,
-                      color: Colors.white,
+      child: GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => ClassModal(classModel: classModel),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      color: Colors.orange,
+                      child: const Icon(
+                        Icons.school,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      className,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        classModel.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      numberOfPeople,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                      const SizedBox(height: 5),
+                      Text(
+                        'Nombre d\'élèves: ${classModel.studentsNumber}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const Icon(Icons.chevron_right),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+              const Icon(Icons.chevron_right),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+

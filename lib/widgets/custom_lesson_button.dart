@@ -1,3 +1,4 @@
+// Bouton d'ajout qui n'est plus utilisé
 import 'package:flutter/material.dart';
 
 class CustomLessonButton extends StatelessWidget {

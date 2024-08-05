@@ -1,3 +1,4 @@
+//Bouton de profil qui n'est plus utilisé
 import 'package:flutter/material.dart';
 
 class ProfileButton extends StatelessWidget {
