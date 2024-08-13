@@ -12,19 +12,15 @@ class TabBarWithFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.orange,
-      padding: const EdgeInsets.symmetric(vertical: 3.0),
+      color: Colors.white,
       child: Row(
         children: <Widget>[
           Expanded(
+            flex: 8, // Cette partie prend 80% de l'espace disponible
             child: TabBar(
               controller: tabController,
               isScrollable: false,
-              dividerColor: Colors.transparent,
-              indicator: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4.0),
-              ),
+              //dividerColor: Colors.transparent,
               tabs: <Widget>[
                 Tab(
                   child: Center(
@@ -33,7 +29,6 @@ class TabBarWithFilter extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
                       ),
                     ),
                   ),
@@ -45,7 +40,6 @@ class TabBarWithFilter extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
                       ),
                     ),
                   ),
@@ -53,22 +47,12 @@ class TabBarWithFilter extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            icon: Row(
-              children: <Widget>[
-                Icon(Icons.filter_list, color: Colors.white),
-                SizedBox(width: 8),
-                Text(
-                  "Filtre",
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ],
+          Expanded(
+            flex: 2,
+            child: IconButton(
+              icon: const Icon(Icons.filter_alt_outlined, color: Colors.white),
+              onPressed: onFilterPressed,
             ),
-            onPressed: onFilterPressed,
           ),
         ],
       ),

@@ -7,31 +7,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar({required this.title, this.actions});
 
   @override
-  Size get preferredSize => const Size.fromHeight(90);
+  Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.orange,
+      backgroundColor: Color(0xFFC89E86),
       elevation: 0,
       titleSpacing: 0,
-      toolbarHeight: 90,
-      title: Padding(
-        padding: const EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
             ),
-            if (actions != null) ...actions!,
-          ],
-        ),
+          ),
+          if (actions != null) ...actions!,
+        ],
       ),
     );
   }

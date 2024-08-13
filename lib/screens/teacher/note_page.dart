@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:apk/widgets/custom_app_bar.dart';
 import 'package:apk/widgets/custom_footer.dart';
-import 'package:apk/widgets/custom_modal_with_margin.dart'; // Non utilisé ici, mais peut-être utile ailleurs.
 import 'package:apk/widgets/filtre_tab_bar.dart'; // Import the new widget
 
 class AddStudentNote extends StatefulWidget {
@@ -51,6 +50,7 @@ class _AddStudentNoteState extends State<AddStudentNote>
       appBar: CustomAppBar(
         title: 'Note',
       ),
+      backgroundColor: Color(0xFFEEE0D5),
       body: Column(
         children: [
           TabBarWithFilter(
@@ -78,15 +78,35 @@ class _AddStudentNoteState extends State<AddStudentNote>
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        key: UniqueKey(),
+      floatingActionButton: ElevatedButton.icon(
         onPressed: () {
           showModalBottomSheet(
             context: context,
-            builder: (BuildContext context) => const BottomSheetContent(),
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+            ),
+            builder: (BuildContext context) => Container(
+              height: MediaQuery.of(context).size.height * 0.55,
+              color: Colors.white,
+              child: const BottomSheetContent(
+                title: 'Ajouter une note',
+              ),
+            ),
           );
         },
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          'Ajouter',
+          style: TextStyle(color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF23324F),
+          padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
       ),
     );
   }

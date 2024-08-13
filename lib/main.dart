@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/authentication_bloc.dart';
 import 'services/api_service.dart';
 import 'screens/welcome/welcome_page.dart';
 import 'screens/login/login_page.dart';
-import 'package:apk/screens/teacher/teacher_page.dart';
-import 'package:apk/screens/profile/profile_page.dart';
+import 'screens/teacher/home_page.dart';
+import 'screens/profile/profile_page.dart';
 import 'screens/student/student_page.dart';
-import 'screens/parent/parent_page.dart';
 import 'repositories/user_repository.dart';
-import 'package:apk/screens/teacher/course_page.dart';
-import 'package:apk/screens/teacher/teacher_exercice_page.dart';
-import 'package:apk/screens/teacher/attendance_screen.dart';
-import 'package:apk/screens/teacher/note_page.dart';
-import 'package:apk/screens/teacher/data.dart';
+import 'screens/teacher/course_page.dart';
+import 'screens/teacher/exercice_page.dart';
+import 'screens/teacher/student_page.dart';
+import 'screens/teacher/note_page.dart';
+
+import 'screens/student/cours.dart';
+import 'screens/student/exercices.dart';
+import 'screens/student/notes.dart';
+import 'screens/student/presences.dart';
+import 'screens/student/info.dart';
 
 void main() async {
   // Initialiser Hive
@@ -22,13 +27,26 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('class');
 
-  final ApiService apiService =
-      ApiService(baseUrl: 'https://schoolapp-pink-xi.vercel.app/api/api');
+  // Récupérer le token depuis SharedPreferences
+  final token = await _getToken();
+
+  // Initialiser ApiService avec le token
+  final ApiService apiService = ApiService(token: token);
+
+  // Créer les instances de UserRepository et AuthenticationBloc
   final UserRepository userRepository = UserRepository(apiService: apiService);
   final AuthenticationBloc authBloc =
       AuthenticationBloc(userRepository: userRepository);
 
+  // Lancer l'application
   runApp(MyApp(authBloc: authBloc));
+}
+
+// Récupérer le token depuis SharedPreferences
+Future<String> _getToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('access_token');
+  return token ?? '';
 }
 
 class MyApp extends StatelessWidget {
@@ -50,26 +68,16 @@ class MyApp extends StatelessWidget {
           '/login': (context) => LoginPage(),
           '/teacher': (context) => TeacherPage(),
           '/student': (context) => StudentPage(),
-          '/parent': (context) => ParentPage(),
           '/profile': (context) => ProfilePage(),
+          '/student-info': (context) => InfoScreen(),
           '/cours': (context) => TeacherCoursePage(),
           '/exercice': (context) => TeacherExercicePage(),
           '/note': (context) => AddStudentNote(),
-          '/attendance': (context) => StudentAttendance(
-                classData: classes.map((classModel) {
-                  return {
-                    'level': classModel.name,
-                    'studentCount': classModel.students.length,
-                    'students': classModel.students.map((student) {
-                      return {
-                        'name': student.name,
-                        'studentId': student.studentId,
-                      };
-                    }).toList(),
-                  };
-                }).toList(),
-              ),
-          // Ajoute d'autres routes ici si nécessaire
+          '/attendance': (context) => StudentAttendance(),
+          '/cours-for-student': (context) => CoursScreen(),
+          '/exercice-for-student': (context) => ExercicesScreen(),
+          '/note-for-student': (context) => NotesScreen(),
+          '/attendance-for-student': (context) => PresencesScreen(),
         },
       ),
     );

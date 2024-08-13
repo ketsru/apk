@@ -1,58 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:apk/widgets/custom_app_bar.dart';
+import 'package:apk/widgets/home_teacher_app_bar.dart';
 import 'package:apk/models/class_model.dart';
-
-// Function to fetch classes
-Future<List<ClassModel>> fetchClasses(String token) async {
-  final response = await http.get(
-    Uri.parse('https://schoolapp-pink-xi.vercel.app/api/api/class'),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    if (responseData['status'] == 1) {
-      final List<dynamic> classesJson = responseData['class'];
-      return classesJson.map((json) => ClassModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Error fetching classes');
-    }
-  } else {
-    throw Exception('Server error');
-  }
-}
+import 'package:apk/services/api_service.dart';
+import 'package:apk/widgets/teacher_class.dart';
 
 class TeacherPage extends StatelessWidget {
   Future<String> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('access_token');
-    print('Retrieved Token: $token');
-    return token ?? '';
+    return ApiService
+        .getToken(); // Utilisation de la méthode getToken du service API
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: HomeAppBar(
         title: 'School',
         actions: [
           Row(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.orange[600],
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.all(12),
                 child: const Icon(
                   Icons.notifications_active,
-                  color: Colors.white,
                 ),
               ),
             ],
@@ -63,11 +36,10 @@ class TeacherPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFFF2EFF6),
                 ),
                 padding: const EdgeInsets.all(16),
                 child: SingleChildScrollView(
@@ -79,7 +51,7 @@ class TeacherPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 25.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.all(12),
@@ -97,44 +69,33 @@ class TeacherPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _buildFeatureCard(
-                              context,
-                              icon: Icons.menu_book,
-                              color: Colors.blue[300]!,
-                              text: 'Cours',
-                              route: '/cours',
-                            ),
-                            const SizedBox(width: 16),
-                            _buildFeatureCard(
-                              context,
-                              icon: Icons.assignment,
-                              color: Colors.grey.shade200,
-                              text: 'Exercice',
-                              route: '/exercice',
-                            ),
-                            const SizedBox(width: 16),
-                            _buildFeatureCard(
-                              context,
-                              icon: Icons.grade,
-                              color: Colors.green[300]!,
-                              text: 'Note',
-                              route: '/note',
-                            ),
-                            //   const SizedBox(width: 16),
-                            //      _buildFeatureCard(
-                            //   context,
-                            //  icon: Icons.check_circle,
-                            //  color: Colors.orange[300]!,
-                            //  text: 'Présence',
-                            //  route: '/attendance',
-                            // ),
-                          ],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildFeatureCard(
+                            context,
+                            icon: Icons.menu_book,
+                            color: Colors.blue[300]!,
+                            text: 'Cours',
+                            route: '/cours',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildFeatureCard(
+                            context,
+                            icon: Icons.assignment,
+                            color: Colors.white,
+                            text: 'Exercice',
+                            route: '/exercice',
+                          ),
+                          const SizedBox(width: 16),
+                          _buildFeatureCard(
+                            context,
+                            icon: Icons.grade,
+                            color: Colors.green[300]!,
+                            text: 'Note',
+                            route: '/note',
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                       const Padding(
@@ -142,7 +103,7 @@ class TeacherPage extends StatelessWidget {
                         child: Text(
                           'Classes',
                           style: TextStyle(
-                            fontSize: 19,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -165,7 +126,8 @@ class TeacherPage extends StatelessWidget {
                           } else {
                             final accessToken = tokenSnapshot.data!;
                             return FutureBuilder<List<ClassModel>>(
-                              future: fetchClasses(accessToken),
+                              future: ApiService.fetchClasses(
+                                  accessToken), // Utilisation de fetchClasses du service API
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -187,8 +149,16 @@ class TeacherPage extends StatelessWidget {
                                     children: classes.map((classModel) {
                                       return TeacherClass(
                                         className: classModel.name,
-                                        numberOfPeople:
+                                        icon: Icons.school,
+                                        subtitle:
                                             'Nombre d\'élève: ${classModel.studentsNumber}',
+                                        route: '/attendance',
+                                        arguments: {
+                                          'id': classModel.id,
+                                          'ClassName': classModel.name,
+                                        },
+                                        iconColor: Colors.orange,
+                                        containerColor: Color(0xFFEEE0D5),
                                       );
                                     }).toList(),
                                   );
@@ -251,73 +221,6 @@ class TeacherPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class TeacherClass extends StatelessWidget {
-  final String className;
-  final String numberOfPeople;
-
-  const TeacherClass({
-    Key? key,
-    required this.className,
-    required this.numberOfPeople,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    color: Colors.orange,
-                    child: const Icon(
-                      Icons.school,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      className,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      numberOfPeople,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const Icon(Icons.chevron_right),
-          ],
-        ),
       ),
     );
   }
