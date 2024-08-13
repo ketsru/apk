@@ -158,7 +158,7 @@ class TeacherPage extends StatelessWidget {
                                           'ClassName': classModel.name,
                                         },
                                         iconColor: Colors.orange,
-                                        containerColor: Color(0xFFEEE0D5),
+                                        containerColor: Colors.white,
                                       );
                                     }).toList(),
                                   );

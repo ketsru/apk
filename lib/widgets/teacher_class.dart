@@ -68,9 +68,10 @@ class TeacherClass extends StatelessWidget {
                     children: [
                       Text(
                         className,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color: subtitleColor,
                         ),
                       ),
                       if (subtitle != null && subtitle!.isNotEmpty) ...[
