@@ -48,27 +48,68 @@ class TeacherPage extends StatelessWidget {
                     children: [
                       const SizedBox(height: 20),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.all(12),
-                          child: const Row(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.search,
+                              CircleAvatar(
+                                radius: 35,
+                                backgroundImage: AssetImage(
+                                    'assets/images/default_avatar.jpeg'),
                               ),
-                              SizedBox(width: 8),
-                              Text(
-                                'Recherche',
+                              const SizedBox(width: 20.0),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'BIN-IDRIS Rizkilaye',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        letterSpacing: 1.2,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      overflow: TextOverflow
+                                          .ellipsis, // Empêche le texte de déborder
+                                    ),
+                                    const SizedBox(height: 7.0),
+                                    Text(
+                                      'Rizklayeb@gail.com',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        letterSpacing: 1.2,
+                                        color: Colors.black,
+                                      ),
+                                      overflow: TextOverflow
+                                          .ellipsis, // Empêche le texte de déborder
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
                       const SizedBox(height: 20),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Menus',
+                          style: TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -103,7 +144,7 @@ class TeacherPage extends StatelessWidget {
                         child: Text(
                           'Classes',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -157,8 +198,15 @@ class TeacherPage extends StatelessWidget {
                                           'id': classModel.id,
                                           'ClassName': classModel.name,
                                         },
-                                        iconColor: Colors.orange,
+                                        iconColor: Color(0xff92a9db),
                                         containerColor: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.shade400,
+                                            blurRadius: 35,
+                                            spreadRadius: -7,
+                                          ),
+                                        ],
                                       );
                                     }).toList(),
                                   );
@@ -217,7 +265,7 @@ class TeacherPage extends StatelessWidget {
             text,
             style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
         ],

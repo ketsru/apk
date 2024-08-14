@@ -7,12 +7,13 @@ class TeacherClass extends StatelessWidget {
   final Map<String, dynamic> arguments;
   final Color? iconColor;
   final Color containerColor;
+  final Color? classNameColor;
   final Color? subtitleColor;
 
   final IconData? icon;
   final EdgeInsetsGeometry iconPadding;
   final IconData trailingIcon;
-
+  final List<BoxShadow>? boxShadow;
   const TeacherClass({
     Key? key,
     required this.className,
@@ -20,11 +21,13 @@ class TeacherClass extends StatelessWidget {
     required this.route,
     required this.arguments,
     this.iconColor,
+    this.classNameColor,
     this.subtitleColor,
     this.containerColor = const Color(0xFFBDBDBD),
     this.icon,
     this.iconPadding = const EdgeInsets.all(16),
     this.trailingIcon = Icons.chevron_right,
+    this.boxShadow,
   }) : super(key: key);
 
   @override
@@ -44,6 +47,7 @@ class TeacherClass extends StatelessWidget {
           decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(16),
+            boxShadow: boxShadow,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +75,7 @@ class TeacherClass extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: subtitleColor,
+                          color: classNameColor,
                         ),
                       ),
                       if (subtitle != null && subtitle!.isNotEmpty) ...[
