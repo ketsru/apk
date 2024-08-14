@@ -39,7 +39,9 @@ class TeacherPage extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color(0xFFF2EFF6),
+                  //color: Color(0xFFF2EFF6),
+                        color: Color(0xFFEEE0D5),
+
                 ),
                 padding: const EdgeInsets.all(16),
                 child: SingleChildScrollView(
@@ -190,7 +192,7 @@ class TeacherPage extends StatelessWidget {
                                     children: classes.map((classModel) {
                                       return TeacherClass(
                                         className: classModel.name,
-                                        icon: Icons.school,
+                                        imageUrl: 'assets/images/class.png',
                                         subtitle:
                                             'Nombre d\'élève: ${classModel.studentsNumber}',
                                         route: '/attendance',

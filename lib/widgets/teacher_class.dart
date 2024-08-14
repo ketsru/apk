@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 class TeacherClass extends StatelessWidget {
   final String className;
-  final String? subtitle; // Correction de 'substitle' en 'subtitle'
+  final String? subtitle;
   final String route;
   final Map<String, dynamic> arguments;
   final Color? iconColor;
   final Color containerColor;
   final Color? classNameColor;
   final Color? subtitleColor;
-
-  final IconData? icon;
+  final String? imageUrl;
   final EdgeInsetsGeometry iconPadding;
   final IconData trailingIcon;
   final List<BoxShadow>? boxShadow;
+
   const TeacherClass({
     Key? key,
     required this.className,
@@ -24,7 +24,7 @@ class TeacherClass extends StatelessWidget {
     this.classNameColor,
     this.subtitleColor,
     this.containerColor = const Color(0xFFBDBDBD),
-    this.icon,
+    this.imageUrl,
     this.iconPadding = const EdgeInsets.all(16),
     this.trailingIcon = Icons.chevron_right,
     this.boxShadow,
@@ -54,19 +54,13 @@ class TeacherClass extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  if (icon != null)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: iconPadding,
-                        color: iconColor ?? Colors.orange,
-                        child: Icon(
-                          icon,
-                          color: Colors.white,
-                        ),
-                      ),
+                  if (imageUrl != null)
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundColor: iconColor ?? Colors.orange,
+                      backgroundImage: AssetImage(imageUrl!),
                     ),
-                  if (icon != null) const SizedBox(width: 12),
+                  if (imageUrl != null) const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

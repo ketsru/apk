@@ -38,6 +38,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/logo.png
-    - assets/images/icone_classe.png
+    - assets/images/class.png
     - assets/images/default_avatar.jpeg
   uses-material-design: true

@@ -117,7 +117,8 @@ class _StudentAttendanceState extends State<StudentAttendance>
                                   child: TeacherClass(
                                     className:
                                         '${student.firstName} ${student.lastName}',
-                                    icon: Icons.school,
+                                    imageUrl:
+                                        'assets/images/default_avatar.jpeg',
                                     iconColor: Colors.orange,
                                     iconPadding: const EdgeInsets.all(8),
                                     subtitle: ClassName,
